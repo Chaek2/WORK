@@ -4,7 +4,7 @@ import numpy as np
 cv.namedWindow("Display window", cv.WINDOW_NORMAL)
 cv.resizeWindow("Display window", 500, 500)
 
-cap = cv.VideoCapture(1)
+cap = cv.VideoCapture(0)
 if not cap.isOpened():
     print("Cannot open camera")
     exit()
