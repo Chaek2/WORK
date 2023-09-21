@@ -14,14 +14,14 @@ def Rap():
 
     cv.namedWindow( "settings" ) # создаем окно настроек
 
-    cv.createTrackbar('area1', 'settings', 2000, 10000, nothing)#4000
-    cv.createTrackbar('area2', 'settings', 45000, 90000, nothing)
+    cv.createTrackbar('area1', 'settings', 2400, 10000, nothing)#4000
+    cv.createTrackbar('area2', 'settings', 40000, 90000, nothing)
 
     fn = 'C:\\Users\\Anton\\Desktop\\Working\\WORK\\2wo\\photo_2023-09-13_16-43-05.jpg'
     imgs = cv.imread(fn)
     hsv = cv.cvtColor(imgs, cv.COLOR_BGR2HSV)
-    area1 = 3000
-    area2 = 10000
+    area1 = 2400
+    area2 = 40000
     # break
     while True:
         area1 = cv.getTrackbarPos('area1', 'settings')
@@ -32,6 +32,7 @@ def Rap():
         thresh = cv.inRange(hsv, h_min, h_max)
         contours = cv.findContours(thresh.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_TC89_KCOS)[0]
         if len(contours) > 0:
+            print('-'*40)
             cnts = []
             for cnt in contours:
                 rect = cv.minAreaRect(cnt)
@@ -41,7 +42,8 @@ def Rap():
                 if area > area1 and area < area2:
                     cv.drawContours(thresh,[box],-1,(255,0,0),2)
                     cv.drawContours(img,[box],-1,(255,0,0),2)
-                    cnts = box
+                    cnts.append(box)
+                    print(box)
         cv.imshow('Display window', img) 
         cv.imshow('Display', thresh) 
         if cv.waitKey(1) == ord('q'):

@@ -1,10 +1,10 @@
 import sys
-from PyQt6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QMainWindow, QApplication,
-    QLabel, QCheckBox, QComboBox, QListWidget, QLineEdit,
-    QLineEdit, QSpinBox, QDoubleSpinBox, QSlider
+    QLabel, QCheckBox, QComboBox, QListWidget, QLineEdit,QVBoxLayout,
+    QLineEdit, QSpinBox, QDoubleSpinBox, QSlider,QHBoxLayout,QWidget,QPushButton,QFileDialog
 )
-from PyQt6.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 
 class MainWindow(QMainWindow):
 
@@ -14,15 +14,16 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("My App")
         self.setFixedSize(400,600)
         
-        ComboBox = QComboBox()
-        ComboBox.addItems(["QLCC6/8", "SOT-89"])
-        ComboBox.currentIndexChanged.connect( self.index_changed )
-        ComboBox.currentTextChanged.connect( self.text_changed )
+        
+        self.label1 = QLabel("Выберите тип")
+        
+        self.combobox1 = QComboBox()
+        self.combobox1.addItem("QLCC6/8")  
+        self.combobox1.addItem("SOT-89")  
+        # self.combobox1.currentIndexChanged.connect(self.index_changed)
 
 
 
-
-        self.setCentralWidget(ComboBox)
 
     #QComboBox "QLCC6/8", "SOT-89"
     def index_changed(self, i):
