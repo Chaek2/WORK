@@ -52,19 +52,17 @@ def Rap():
             box = cv.boxPoints(rect)
             box = np.int0(box)
             area = int(rect[1][0]*rect[1][1])
-            if area > 300 and area < 1000:
+            if area > 400 and area < 1000:
                 cv.drawContours(img,[box],-1,(255,0,0),2)
                 cnts = box
-        edge1 = np.int0((cnts[1][0] - cnts[0][0],cnts[1][1] - cnts[0][1]))
-        edge2 = np.int0((cnts[2][0] - cnts[1][0], cnts[2][1] - cnts[1][1]))
-
-        usedEdge = edge1
-        if cv.norm(edge2) > cv.norm(edge1):
-            usedEdge = edge2
-        reference = (1,0) 
-
-        angle = 180.0/math.pi * math.acos((reference[0]*usedEdge[0] + reference[1]*usedEdge[1]) / (cv.norm(reference) *cv.norm(usedEdge)))
-        print(angle)
+                edge1 = np.int0((cnts[1][0] - cnts[0][0],cnts[1][1] - cnts[0][1]))
+                edge2 = np.int0((cnts[2][0] - cnts[1][0], cnts[2][1] - cnts[1][1]))
+                usedEdge = edge1
+                if cv.norm(edge2) < cv.norm(edge1):
+                    usedEdge = edge2
+                reference = (1,0) 
+                angle = 180.0/math.pi * math.acos((reference[0]*usedEdge[0] + reference[1]*usedEdge[1]) / (cv.norm(reference) *cv.norm(usedEdge)))
+                print(angle)  
         
         cv.imshow('result', thresh) 
         cv.imshow('Display window', img) 

@@ -1,11 +1,11 @@
 
 import sys
-from PyQt6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QMainWindow, QApplication,
     QLabel, QCheckBox, QComboBox, QListWidget, QLineEdit,QVBoxLayout,
     QLineEdit, QSpinBox, QDoubleSpinBox, QSlider,QHBoxLayout,QWidget,QPushButton
 )
-from PyQt6.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap
 log=["1","2","3","4"]
 Radius = "Повернуть на 36*"
 
