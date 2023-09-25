@@ -17,7 +17,7 @@ def Rap():
     cv.createTrackbar('area1', 'settings', 2000, 10000, nothing)#4000
     cv.createTrackbar('area2', 'settings', 45000, 90000, nothing)
 
-    fn = 'C:\\Users\\Anton\\Desktop\\Working\\WORK\\2wo\\photo_2023-09-13_16-43-05.jpg'
+    fn = 'C:\\Users\\Anton\\Desktop\\Working\\WORK\\2wo\\photo_2023-09-13_16-43-06.jpg'
     imgs = cv.imread(fn)
     hsv = cv.cvtColor(imgs, cv.COLOR_BGR2HSV)
     area1 = 3000
