@@ -170,6 +170,7 @@ class MainWindow(QMainWindow):
         if dialog.exec_():
             fileNames = dialog.selectedFiles()
             url = fileNames[0]
+            log.append('file: '+url) 
             self.image = QPixmap(url)
             self.SetImage()
     def ImageBlack(self):
