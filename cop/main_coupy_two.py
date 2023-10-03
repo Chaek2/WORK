@@ -2,45 +2,73 @@ import numpy as np
 import cv2 as cv
 import math
 
-def Rap():
-    def nothing(*arg):
-        pass
 
-    cv.namedWindow("Display window", cv.WINDOW_NORMAL)
-    cv.resizeWindow("Display window", 500, 500)
+def SimpleWay(rotateImage, angle):
+    imgHeight, imgWidth = rotateImage.shape[0], rotateImage.shape[1]
+    centreY, centreX = imgHeight//2, imgWidth//2
+    rotationMatrix = cv.getRotationMatrix2D((centreY, centreX), angle, 1.0)
+    rotatingimage = cv.warpAffine(
+        rotateImage, rotationMatrix, (imgWidth, imgHeight))
+    return rotatingimage
 
-    cv.namedWindow("result", cv.WINDOW_NORMAL)
-    cv.resizeWindow("result", 500, 500)
+def nothing(*arg):
+    pass
 
-    cv.namedWindow( "settings" ) # создаем окно настроек
+cv.namedWindow("DisplayR", cv.WINDOW_NORMAL)
+cv.resizeWindow("DisplayR", 500, 500)
+cv.namedWindow("DisplayN", cv.WINDOW_NORMAL)
+cv.resizeWindow("DisplayN", 500, 500)
 
-    cv.createTrackbar('h1', 'settings', 0, 255, nothing)
-    cv.createTrackbar('s1', 'settings', 0, 255, nothing)
-    cv.createTrackbar('v1', 'settings', 0, 255, nothing)
-    cv.createTrackbar('h2', 'settings', 255, 255, nothing)
-    cv.createTrackbar('s2', 'settings', 255, 255, nothing)
-    cv.createTrackbar('v2', 'settings', 93, 255, nothing) #92-102
-    crange = [0,0,0, 0,0,0]
+crange = [0,0,0, 0,0,0]
 
+fn = 'C:\\Users\\Anton\\Desktop\\Working\\WORK\\2wo\\photo_2023-09-13_16-43-07.jpg'
+im = cv.imread(fn)
 
-    fn = 'crop.jpg'
-    img = cv.imread(fn)
-    immgs = img.copy()
+area1 = 2400
+area2 = 10000
 
-    crange = [0,0,0, 0,0,0]
+hsv = cv.cvtColor(im, cv.COLOR_BGR2HSV )
+while True:
+    img = im
+    cnts=[]
+    h_min = np.array((0, 40, 31), np.uint8)
+    h_max = np.array((35, 255, 255), np.uint8)
+    thresh = cv.inRange(hsv, h_min, h_max)
+    contours = cv.findContours(thresh.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_TC89_KCOS)[0]
+    for cnt in contours:
+        rect = cv.minAreaRect(cnt)
+        box = cv.boxPoints(rect)
+        box = np.int0(box)
+        area = int(rect[1][0]*rect[1][1])
+        if area > area1 and area < area2:
+            cv.drawContours(img,[box],-1,(255,0,0),2)
+            cv.drawContours(im,[box],-1,(255,0,0),2)
+            cnts.append(box)
+    cnts1=cnts[0]
+    
+    t1 = 0
+    t2 = 0 
 
-    hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV )
-    while True:
+    if math.sqrt((cnts1[0][0]-cnts1[1][0])**2+(cnts1[0][1]-cnts1[1][1])**2) > math.sqrt((cnts1[0][0]-cnts1[3][0])**2+(cnts1[0][1]-cnts1[3][1])**2):
+        # #неч
+        t1 = [cnts1[0][0],cnts1[3][1]]
+        t2 = [cnts1[3][0],cnts1[0][1]]
+    else:
+        #ч 
+        t1 = [cnts1[0][0],cnts1[1][1]]
+        t2 = [cnts1[1][0],cnts1[0][1]]
 
-        img = immgs.copy()
+    angle = math.degrees(math.atan((t1[1]-t2[1])/(t2[0]-t1[0])))
+    img = SimpleWay(img,angle)
+    print(angle)
+    cv.imshow('DisplayR', img) 
+    cv.imshow('DisplayN', im) 
+    
+    # break
+    if cv.waitKey(1) == ord('q'):
+        break
 
-        h1 = cv.getTrackbarPos('h1', 'settings')
-        s1 = cv.getTrackbarPos('s1', 'settings')
-        v1 = cv.getTrackbarPos('v1', 'settings')
-        
-        h2 = cv.getTrackbarPos('h2', 'settings')
-        s2 = cv.getTrackbarPos('s2', 'settings')
-        v2 = cv.getTrackbarPos('v2', 'settings')
+cv.destroyAllWindows()
 
         h_min = np.array((h1, s1, v1), np.uint8)
         h_max = np.array((h2, s2, v2), np.uint8)
