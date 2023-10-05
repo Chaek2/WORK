@@ -184,8 +184,12 @@ class MainWindow(QMainWindow):
             t2 = [cnts1[1][0], cnts1[0][1]]
         angle = math.degrees(math.atan((t1[1] - t2[1]) / (t2[0] - t1[0])))
 
-        if t1[0] > 400 and t1[1] > 400:
-            angle += 180
+        # rows, cols = image_main.shape[:2]
+        # if t1[0] > (rows / 2) and t1[1] > (cols / 2):
+        # if angle > 360:
+        #     angle -= 180
+        # else:
+        #     angle += 180
 
         image_second = self.RotateImage(image_main)
         cv.imwrite("Push2.jpg", image_second)
