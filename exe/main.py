@@ -1,20 +1,18 @@
 import numpy as np
 import math
 import cv2 as cv
-import sys
 from PyQt5.QtWidgets import (
     QMainWindow,
     QApplication,
     QLabel,
     QComboBox,
     QListWidget,
-    QSlider,
     QWidget,
     QPushButton,
     QFileDialog,
     QGridLayout,
 )
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtGui import QPixmap
 
 Radius = "Повернуть на "
 proccess = 0
@@ -67,6 +65,7 @@ class MainWindow(QMainWindow):
         pixmap_image = QPixmap(url)
         pixmap_image = pixmap_image.scaled(400, 300)
         lable_image.setPixmap(pixmap_image)
+        # lable_image.setFixedSize(400,300)
         self.maingrid.addWidget(lable_image, 2, 0, 2, 2)
 
         # ComboBox
@@ -139,7 +138,7 @@ class MainWindow(QMainWindow):
         h_min = np.array((0, 40, 31), np.uint8)
         h_max = np.array((35, 255, 255), np.uint8)
         image_first = cv.inRange(hsv, h_min, h_max)
-
+        # print(url)
         cnts = []
         area1 = 0
         area2 = 0
@@ -160,10 +159,10 @@ class MainWindow(QMainWindow):
             box = np.int0(box)
             area = int(rect[1][0] * rect[1][1])
             if area > area1 and area < area2:
-                cv.drawContours(image_first, [box], -1, (255, 0, 255), 2)
+                cv.drawContours(image_main, [box], -1, (0, 255, 0), 3, cv.LINE_AA)
                 cnts.append(box)
 
-        cv.imwrite("Push1.jpg", image_first)
+        cv.imwrite("Push1.jpg", image_main)
 
         cnts1 = cnts[0]
 
@@ -183,13 +182,6 @@ class MainWindow(QMainWindow):
             t1 = [cnts1[0][0], cnts1[1][1]]
             t2 = [cnts1[1][0], cnts1[0][1]]
         angle = math.degrees(math.atan((t1[1] - t2[1]) / (t2[0] - t1[0])))
-
-        # rows, cols = image_main.shape[:2]
-        # if t1[0] > (rows / 2) and t1[1] > (cols / 2):
-        # if angle > 360:
-        #     angle -= 180
-        # else:
-        #     angle += 180
 
         image_second = self.RotateImage(image_main)
         cv.imwrite("Push2.jpg", image_second)
