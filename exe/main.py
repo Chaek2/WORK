@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
         h_min = np.array((0, 40, 31), np.uint8)
         h_max = np.array((35, 255, 255), np.uint8)
         image_first = cv.inRange(hsv, h_min, h_max)
-        # print(url)
+
         cnts = []
         area1 = 0
         area2 = 0
