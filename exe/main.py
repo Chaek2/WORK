@@ -62,7 +62,11 @@ class MainWindow(QMainWindow):
 
         # Картинка
         lable_image = QLabel()
-        pixmap_image = QPixmap(url)
+        image = cv.imread(url)
+        # y, x, z = image.shape
+        # image = image[100 : y - 100, 100 : x - 100]
+        cv.imwrite("Push0.jpg", image)
+        pixmap_image = QPixmap("Push0.jpg")
         pixmap_image = pixmap_image.scaled(400, 300)
         lable_image.setPixmap(pixmap_image)
         # lable_image.setFixedSize(400,300)
@@ -95,7 +99,6 @@ class MainWindow(QMainWindow):
     def ComboBox_Chancged(self, i):
         global proccess
         proccess = i
-        print(i)
 
     def Step(self, i: int):
         global menu, url, log, angle
@@ -107,25 +110,32 @@ class MainWindow(QMainWindow):
             case 0:
                 log.addItem("file: " + url)
                 self.listbox = log
-                self.pixmap_image = QPixmap(url)
+                image = cv.imread(url)
+                y, x, z = image.shape
+                # image = image[100 : y - 100, 100 : x - 100]
+                cv.imwrite("Push0.jpg", image)
+                self.pixmap_image = QPixmap("Push0.jpg")
                 self.pixmap_image = self.pixmap_image.scaled(400, 300)
                 self.lable_image.setPixmap(self.pixmap_image)
+                # self.lable_image.setFixedSize(400,300)
                 self.maingrid.addWidget(self.lable_image, 2, 0, 2, 2)
                 self.ImageAngleSearch()
             case 1:
                 log.addItem("Находим объекты")
                 self.listbox = log
                 self.pixmap_image = QPixmap("Push1.jpg")
-                self.pixmap_image = self.pixmap_image.scaled(400, 300)
+                # self.pixmap_image = self.pixmap_image.scaled(400, 300)
                 self.lable_image.setPixmap(self.pixmap_image)
+                # self.lable_image.setFixedSize(400,300)
                 self.maingrid.addWidget(self.lable_image, 2, 0, 2, 2)
             case 2:
                 self.maingrid.removeWidget(self.lab5)
                 log.addItem("Поворачиваем")
                 self.listbox = log
                 self.pixmap_image = QPixmap("Push2.jpg")
-                self.pixmap_image = self.pixmap_image.scaled(400, 300)
+                # self.pixmap_image = self.pixmap_image.scaled(400, 300)
                 self.lable_image.setPixmap(self.pixmap_image)
+                self.lable_image.setFixedSize(400, 300)
                 self.maingrid.addWidget(self.lable_image, 2, 0, 2, 2)
                 self.lab5 = QLabel(Radius + str(angle * -1))
                 self.maingrid.addWidget(self.lab5, 11, 0)
@@ -133,7 +143,7 @@ class MainWindow(QMainWindow):
 
     def ImageAngleSearch(self):
         global proccess, url, log, angle
-        image_main = cv.imread(url)
+        image_main = cv.imread("Push0.jpg")
         hsv = cv.cvtColor(image_main, cv.COLOR_BGR2HSV)
         h_min = np.array((0, 40, 31), np.uint8)
         h_max = np.array((35, 255, 255), np.uint8)
