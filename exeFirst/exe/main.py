@@ -19,7 +19,7 @@ Radius = "Повернуть на "
 proccess = 0
 menu = 0
 angle = 0
-url = "photo/test_photo2.jpg"
+url = ""
 
 app = QApplication([])
 log = QListWidget()
@@ -63,13 +63,7 @@ class MainWindow(QMainWindow):
 
         # Картинка
         lable_image = QLabel()
-        with Image.open(url) as img1:
-            img1.load()
-        x,y = img1.size
-        box = (x/2-200,y/2-200,x/2+200,y/2+200)
-        imgs = img1.crop(box)
-        imgs.save('Push0.jpg')
-        pixmap_image = QPixmap("Push0.jpg")
+        pixmap_image = QPixmap("")
         # pixmap_image = pixmap_image.scaled(400, 300)
         lable_image.setPixmap(pixmap_image)
         # lable_image.setFixedSize(400,300)
