@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QGridLayout,
 )
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
 from PyQt5.QtGui import QPixmap
 
 Radius = "Повернуть на "
@@ -85,7 +86,7 @@ class MainWindow(QMainWindow):
         # self.setLayout(self.maingrid)
         self.setCentralWidget(self.wid)
         # self.saveState(1)
-
+#807
     # функции
     def Back(self):
         self.Step(-1)

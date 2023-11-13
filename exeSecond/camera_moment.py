@@ -2,6 +2,15 @@ import cv2 as cv
 
 num_cam=1
 
+def VIDIO():
+    try:
+        video=cv.VideoCapture(num_cam)
+        hasFrame,frame=video.read()
+        return frame
+    except:
+        pass
+
+
 def img():
     try:
         video=cv.VideoCapture(num_cam)
@@ -30,5 +39,3 @@ def test():
                 break
     except:
         pass
-
-test()
