@@ -14,7 +14,7 @@ while 1:
 #G0 X62 Y171
 #G0 X60.4 Y170.8
 
-# engine.com_port('G0 A90') - поворот
-# engine.com_port('G0 X90') - X
-# engine.com_port('G0 Y90') - Y
-# engine.com_port('G0 Z90') - Z
+# engine.com_port('G0 A90') - A поворот
+# engine.com_port('G0 X90') - X ось
+# engine.com_port('G0 Y90') - Y ось
+# engine.com_port('G0 Z90') - Z ось
