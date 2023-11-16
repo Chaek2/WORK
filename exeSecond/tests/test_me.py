@@ -8,13 +8,19 @@ while 1:
     command = input("Command:  ")
     if command == 'EXIT':
         break
-    engine.move_axis(command)
+    engine.perform(command)
         
-#62 171 - CAMERA DOWN
-#G0 X62 Y171
-#G0 X60.4 Y170.8
+#CAMERA DOWN
+#G0 X60.4 Y171 Z10
 
 # engine.com_port('G0 A90') - A поворот
 # engine.com_port('G0 X90') - X ось
 # engine.com_port('G0 Y90') - Y ось
 # engine.com_port('G0 Z90') - Z ось
+
+
+#light
+#M804-5 on/of up
+#M806-7 on/off down
+
+

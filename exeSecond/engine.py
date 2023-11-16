@@ -31,7 +31,7 @@ try:
 except Exception as e:
     print(e)
 
-def move_axis(arr):
+def perform(arr):
     try:
         m = os.popen('echo '+arr.upper()+' > '+com_port).read()
         return m
