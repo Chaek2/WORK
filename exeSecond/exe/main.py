@@ -65,6 +65,15 @@ class App(QWidget):
         self.btns = QPushButton("Настройки")
         self.btns.clicked.connect(self.Click_settings)
 
+        self.btnup = QPushButton("вверх")
+        self.btnup.clicked.connect(self.Click_Up)
+        self.btndown = QPushButton("вниз")
+        self.btndown.clicked.connect(self.Click_Down)
+        self.btnleft = QPushButton("влево")
+        self.btnleft.clicked.connect(self.Click_Left)
+        self.btnright = QPushButton("вправо")
+        self.btnright.clicked.connect(self.Click_Right)
+
         self.grid.addWidget(self.camdown,0,0,3,3)
 
         self.grid.addWidget(self.labX,2,0)
@@ -77,6 +86,11 @@ class App(QWidget):
         self.grid.addWidget(self.btnl,5,0,1,4)
         self.grid.addWidget(self.btns,6,0,1,4)
 
+
+        self.grid.addWidget(self.btnup,2,6)
+        self.grid.addWidget(self.btndown,3,6)
+        self.grid.addWidget(self.btnleft,3,5)
+        self.grid.addWidget(self.btnright,3,7)
 
         self.setLayout(self.grid)
 
@@ -110,8 +124,33 @@ class App(QWidget):
         except:
             pass
         if centerXY is not None:
-            self.txtX.setText(str(centerXY[0]).replace('.',','))
-            self.txtY.setText(str(centerXY[1]).replace('.',','))
+            self.txtX.setText(str(round(centerXY[0], 2)).replace('.',','))
+            self.txtY.setText(str(round(centerXY[1], 2)).replace('.',','))
+
+    def Click_Left(self):
+        x = float(self.txtX.text().replace(',','.'))
+        x+=0.1
+        self.Wolk(x,float(self.txtY.text().replace(',','.')))
+
+    def Click_Right(self):
+        x = float(self.txtX.text().replace(',','.'))
+        x-=0.1
+        self.Wolk(x,float(self.txtY.text().replace(',','.')))
+
+    def Click_Down(self):
+        y = float(self.txtY.text().replace(',','.'))
+        y-=0.1
+        self.Wolk(float(self.txtX.text().replace(',','.')),y)
+
+    def Click_Up(self):
+        y = float(self.txtY.text().replace(',','.'))
+        y+=0.1
+        self.Wolk(float(self.txtX.text().replace(',','.')),y)
+
+    def Wolk(self,x,y):
+        self.txtX.setText(str(round(x, 2)).replace('.',','))
+        self.txtY.setText(str(round(y, 2)).replace('.',','))
+        self.Click()
 
     def Click_light(self):
         global light
@@ -125,7 +164,6 @@ class App(QWidget):
     def Click_settings(self):
         os.remove("sets.pickle")
         quit()
-
 
     @pyqtSlot(QImage)
     def update_image(self, cv_img):
@@ -144,10 +182,14 @@ class Settings(QWidget):
         self.setFixedSize(400,300)
         self.grid = QVBoxLayout()
 
-        self.combobox = QComboBox()
+        self.cbmcam = QComboBox()
+        self.cbmcom = QComboBox()
+
+        for port in self.CAMERA_PORT():
+            self.cbmcam.addItem(str(port))
 
         for port in self.ports:
-            self.combobox.addItem(port.device)
+            self.cbmcom.addItem(port.device)
         
 
         self.labcam = QLabel('Камера')
@@ -159,9 +201,9 @@ class Settings(QWidget):
         self.btn.clicked.connect(self.Save)
 
         self.grid.addWidget(self.labcam)
-        self.grid.addWidget(self.txtcam)
+        self.grid.addWidget(self.cbmcam)
         self.grid.addWidget(self.labcom)
-        self.grid.addWidget(self.combobox)
+        self.grid.addWidget(self.cbmcom)
         self.grid.addWidget(self.btn)
 
         self.setLayout(self.grid)
@@ -181,8 +223,8 @@ class Settings(QWidget):
     def Save(self):
         global camera
         sets = Setting()
-        sets.camera_lower = int(self.txtcam.text())
-        sets.com_port = str(self.combobox.currentText())
+        sets.camera_lower = int(self.cbmcam.currentText())
+        sets.com_port = str(self.cbmcom.currentText())
         with open("sets.pickle", "wb") as f:
             pickle.dump(sets, f, protocol=pickle.HIGHEST_PROTOCOL)
         engine.start(sets.com_port)
@@ -190,6 +232,27 @@ class Settings(QWidget):
         self.w = App()
         self.hide()
 
+    def CAMERA_PORT(self):
+        is_working = True
+        dev_port = 0
+        working_ports = []
+        available_ports = []
+        while is_working:
+            camera = cv.VideoCapture(dev_port)
+            if not camera.isOpened():
+                is_working = False
+            else:
+                is_reading, img = camera.read()
+                w = camera.get(3)
+                h = camera.get(4)
+                if is_reading:
+                    working_ports.append(dev_port)
+                else:
+                    available_ports.append(dev_port)
+            dev_port +=1
+        working_ports = working_ports[:-1]
+        return working_ports
+        
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Settings()
