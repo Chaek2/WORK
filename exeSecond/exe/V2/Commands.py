@@ -52,7 +52,27 @@ def angleSearch():
             t1 = [cnts1[0][0], cnts1[1][1]]
             t2 = [cnts1[1][0], cnts1[0][1]]
         angle = math.degrees(math.atan((t1[1] - t2[1]) / (t2[0] - t1[0])))
-        
+        x, y = image_main.shape[:2]
+        xs = y/2-cnts1[0][1]
+        ys = y/2-cnts1[2][1]
+            
+        xt = 0
+        if xs > 0:
+            if abs(xs) > abs(ys):
+                xt = xs
+            else:
+                xt = ys
+        else:
+            if abs(xs) < abs(ys):
+                xt = xs
+            else:
+                xt = ys
+        if xt < 0:
+            image_main = self.RotateImage(image_main, 180)
+            if angle < 180:
+                angle +=180
+            elif angle > 180:
+                angle-=180       
         cv.imwrite("TM0.jpg", Ang(image_main,angle)) 
 
         return angle

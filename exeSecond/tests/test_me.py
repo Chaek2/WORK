@@ -41,7 +41,7 @@ t2 = 0
 
 if math.sqrt(
     (cnts1[0][0] - cnts1[1][0]) ** 2 + (cnts1[0][1] - cnts1[1][1]) ** 2
-) > math.sqrt(
+) < math.sqrt(
     (cnts1[0][0] - cnts1[3][0]) ** 2 + (cnts1[0][1] - cnts1[3][1]) ** 2
 ):
     # #неч

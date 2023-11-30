@@ -56,6 +56,7 @@ class VideoThread(QThread):
                     self.change_pixmap_signal.emit(p)
 
 class Settings(QWidget):
+#----------------------------------------------------------------------------------------------------------------
     def __init__(self):
         super().__init__()
         global sets
@@ -81,7 +82,7 @@ class Settings(QWidget):
         self.grid.addWidget(self.btn)
 
         self.setLayout(self.grid)
-
+#--------------------------------try-----------------------------------------------------------------------------
         
         try:
             with open("SET.pickle", "rb") as f:
@@ -94,7 +95,7 @@ class Settings(QWidget):
             for port in self.ports:
                 self.cbmcom.addItem(port.device)
             self.show()
-
+#--------------------------------defs-----------------------------------------------------------------------------
     def Save(self):
         global sets
         if int(self.cbmcam.currentText()) > -1 and self.cbmcom.currentText() != "": 
@@ -130,7 +131,9 @@ class App(QWidget):
 #----------------------------------------------------------------------------------------------------------------
     def __init__(self):
         super().__init__()    
-        engine.start(sets.COM)    
+        engine.start(sets.COM)
+        self.Perfomence("M809")
+        self.Perfomence("M805")    
         self.setWindowTitle('Калибровка НКМЗ')
         self.setFixedSize(900,800)
         self.grid = QVBoxLayout()
@@ -355,26 +358,34 @@ class App(QWidget):
     @pyqtSlot(QImage)
     def update_image(self, cv_img):
         self.cam.setPixmap(QPixmap.fromImage(cv_img))
-#----------------------------------------------------------------------------------------------------------------
+#--------------------------------defs--Perfomence--Pump--Light---------------------------------------------------
     def Perfomence(self, string: str):
         engine.perform(string)
 
     def Click_Pump(self):
         global take, A
         self.Perfomence("G0 A"+(str(0)))
+        time.sleep(1)
         if not take:
             #Включить вакум
+            self.Perfomence("G0 Z20")
+            time.sleep(1.2)
             self.Perfomence("M808")
             self.LP.setStyleSheet("background-color: green")
             take = True
+            time.sleep(1.2)
         else:
             #Выключить вакум
-            time.sleep(1)
+            self.Perfomence("G0 Z17")
+            time.sleep(1.2)
             self.Perfomence("G0 A"+(str(A))) 
             time.sleep(1)
             self.Perfomence("M809")
             self.LP.setStyleSheet("background-color: black")
             take = False
+        time.sleep(1)
+        self.Perfomence("G0 A"+(str(0))) 
+        self.Perfomence("G0 Z0")
 
     def Click_Light(self):
         global light
@@ -388,7 +399,7 @@ class App(QWidget):
             self.Perfomence("M805")
             self.LL.setStyleSheet("background-color: black")
             light = False
-#----------------------------------------------------------------------------------------------------------------
+#--------------------------------------Wolk--Setting--Camera_XY--Save_Camera--Save_Box--Grid---------------------
     def Click_Wolk(self):
         self.Perfomence("G0 X"+str(float(self.TX.text().replace(',','.').replace(' ','')))+" Y"+
         str(float(self.TY.text().replace(',','.').replace(' ','')))+
@@ -447,7 +458,7 @@ class App(QWidget):
             self.TX.setText(str(box_first_XY[0]).replace('.',',').replace(' ',''))
             self.TY.setText(str(box_first_XY[1]).replace('.',',').replace(' ',''))
             self.Perfomence("G0 X"+str(box_first_XY[0])+" Y"+str(box_first_XY[1]))
-#----------------------------------------------------------------------------------------------------------------
+#-----------------------------------DULRBF-----------------------------------------------------------------------
     def Click_Down(self):
         zd = round(float(self.TZ.text().replace(',','.').replace(' ',''))+0.1,1)
         self.Perfomence("G0 Z"+str(zd))
@@ -473,7 +484,7 @@ class App(QWidget):
         yf = round(float(self.TY.text().replace(',','.').replace(' ',''))+0.1,1)
         self.Perfomence("G0 Y"+str(yf))
         self.TY.setText(str(yf).replace('.',',').replace(' ',''))
-#----------------------------------------------------------------------------------------------------------------
+#----------------------------------AL--AR--SearchAngle-----------------------------------------------------------
     def Click_A_Left(self):
         global A
         A += 1
