@@ -1,5 +1,5 @@
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QGridLayout, QInputDialog, QLineEdit, QPushButton, QVBoxLayout, QComboBox
+from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QGridLayout, QInputDialog, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QComboBox
 from PyQt5.QtGui import QIntValidator,QDoubleValidator,QFont, QPixmap, QImage
 import sys
 import serial.tools.list_ports
@@ -12,6 +12,7 @@ import os
 
 centerXY = []
 light = False
+take = False
 camera = -1
 
 class VideoThread(QThread):
@@ -54,10 +55,10 @@ class App(QWidget):
         self.txtY = QLineEdit()
 
         self.btn = QPushButton("Запомнить положение")
-        self.btn.clicked.connect(self.Click)
+        self.btn.clicked.connect(self.Click_Save)
 
         self.btn1 = QPushButton("Вывести")
-        self.btn1.clicked.connect(self.Clicks)
+        self.btn1.clicked.connect(self.Bring_Out)
 
         self.btnl = QPushButton("Свет")
         self.btnl.clicked.connect(self.Click_light)
@@ -65,16 +66,28 @@ class App(QWidget):
         self.btns = QPushButton("Настройки")
         self.btns.clicked.connect(self.Click_settings)
 
-        self.btnup = QPushButton("вверх")
-        self.btnup.clicked.connect(self.Click_Up)
-        self.btndown = QPushButton("вниз")
-        self.btndown.clicked.connect(self.Click_Down)
+        self.btnforward = QPushButton("вперёд")
+        self.btnforward.clicked.connect(self.Click_forward)
+        self.btnback = QPushButton("назад")
+        self.btnback.clicked.connect(self.Click_Back)
         self.btnleft = QPushButton("влево")
         self.btnleft.clicked.connect(self.Click_Left)
         self.btnright = QPushButton("вправо")
         self.btnright.clicked.connect(self.Click_Right)
 
-        self.grid.addWidget(self.camdown,0,0,3,3)
+        self.btndown = QPushButton("Вниз")
+        self.btndown.clicked.connect(self.Click_Down)
+        self.btnup = QPushButton("Вверх")
+        self.btnup.clicked.connect(self.Click_Up)
+        
+        self.btntake = QPushButton("Взять/Отпустить")
+        self.btntake.clicked.connect(self.Click_Take)
+
+        
+        self.btnAccuracy = QPushButton("Точная настройка")
+        self.btnAccuracy.clicked.connect(self.Click_Accuracy)
+
+        self.grid.addWidget(self.camdown,0,5,3,3)
 
         self.grid.addWidget(self.labX,2,0)
         self.grid.addWidget(self.labY,2,2)
@@ -87,10 +100,16 @@ class App(QWidget):
         self.grid.addWidget(self.btns,6,0,1,4)
 
 
-        self.grid.addWidget(self.btnup,2,6)
-        self.grid.addWidget(self.btndown,3,6)
+        self.grid.addWidget(self.btnforward,2,6)
+        self.grid.addWidget(self.btnback,3,6)
         self.grid.addWidget(self.btnleft,3,5)
         self.grid.addWidget(self.btnright,3,7)
+
+        self.grid.addWidget(self.btndown,4,5)
+        self.grid.addWidget(self.btntake,4,6)
+        self.grid.addWidget(self.btnup,4,7)
+
+        self.grid.addWidget(self.btnAccuracy,5,6)
 
         self.setLayout(self.grid)
 
@@ -100,7 +119,7 @@ class App(QWidget):
 
         self.show()
 
-    def Click(self):
+    def Click_Save(self):
         global centerXY
         if len(self.txtX.text())>0 and len(self.txtY.text())>0:
             if len(centerXY) == 0:
@@ -114,9 +133,9 @@ class App(QWidget):
                     pickle.dump(centerXY, f, protocol=pickle.HIGHEST_PROTOCOL)
             except:
                 pass
-            engine.perform("G0 X"+str(centerXY[0])+" Y"+str(centerXY[1]))
+            self.Perfomence("G0 X"+str(centerXY[0])+" Y"+str(centerXY[1])+" Z0")
 
-    def Clicks(self):
+    def Bring_Out(self):
         global centerXY
         try:
             with open("XY.pickle", "rb") as f:
@@ -124,42 +143,64 @@ class App(QWidget):
         except:
             pass
         if centerXY is not None:
-            self.txtX.setText(str(round(centerXY[0], 2)).replace('.',','))
-            self.txtY.setText(str(round(centerXY[1], 2)).replace('.',','))
+            self.txtX.setText(str(round(centerXY[0], 1)).replace('.',','))
+            self.txtY.setText(str(round(centerXY[1], 1)).replace('.',','))
+
+    def Click_Down(self):
+        #Приблизить
+        self.Perfomence("G0 Z18")
+    def Click_Up(self):
+        #Отдалить
+        self.Perfomence("G0 Z0")
+
+    def Perfomence(self, string: str):
+        engine.perform(string)
+
+    def Click_Take(self):
+        global take
+        if not take:
+            #Включить вакум
+            self.Perfomence("M808")
+            take = True
+        else:
+            #Выключить вакум
+            self.Perfomence("M809")
+            take = False
 
     def Click_Left(self):
         x = float(self.txtX.text().replace(',','.'))
         x+=0.1
-        self.Wolk(x,float(self.txtY.text().replace(',','.')))
-
+        self.txtX.setText(str(round(x, 1)).replace('.',','))
+        self.Click_Save()
     def Click_Right(self):
         x = float(self.txtX.text().replace(',','.'))
         x-=0.1
-        self.Wolk(x,float(self.txtY.text().replace(',','.')))
-
-    def Click_Down(self):
+        self.txtX.setText(str(round(x, 1)).replace('.',','))
+        self.Click_Save()
+    def Click_Back(self):
         y = float(self.txtY.text().replace(',','.'))
         y-=0.1
-        self.Wolk(float(self.txtX.text().replace(',','.')),y)
-
-    def Click_Up(self):
+        self.txtY.setText(str(round(y, 1)).replace('.',','))
+        self.Click_Save()
+    def Click_forward(self):
         y = float(self.txtY.text().replace(',','.'))
         y+=0.1
-        self.Wolk(float(self.txtX.text().replace(',','.')),y)
-
-    def Wolk(self,x,y):
-        self.txtX.setText(str(round(x, 2)).replace('.',','))
-        self.txtY.setText(str(round(y, 2)).replace('.',','))
-        self.Click()
+        self.txtY.setText(str(round(y, 1)).replace('.',','))
+        self.Click_Save()
 
     def Click_light(self):
         global light
-        if not light:
-            engine.perform("M804")
+        if not light: 
+            #Включить свет
+            self.Perfomence("M804")
             light = True
         elif light:
-            engine.perform("M805")
+            #Выключить свет
+            self.Perfomence("M805")
             light = False
+
+    def Click_Accuracy(self):
+        self.w = Accuracy()
 
     def Click_settings(self):
         os.remove("sets.pickle")
@@ -253,8 +294,72 @@ class Settings(QWidget):
         working_ports = working_ports[:-1]
         return working_ports
         
+class Accuracy(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Точная настройка')
+        self.grid = QVBoxLayout()
+
+        self.X = QHBoxLayout()
+        self.Y = QHBoxLayout()
+        self.Z = QHBoxLayout()
+
+        self.lX = QLabel('X')
+        self.lY = QLabel('Y')
+        self.lZ = QLabel('Y')
+
+        self.tX = QLineEdit()
+        self.tY = QLineEdit()
+        self.tZ = QLineEdit()
+
+        self.bX = QPushButton("X")
+        self.bX.clicked.connect(self.CX)
+
+        self.bY = QPushButton("Y")
+        self.bY.clicked.connect(self.CY)
+
+        self.bZ = QPushButton("Z")
+        self.bZ.clicked.connect(self.CZ)
+
+
+        self.X.addWidget(self.lX)
+        self.X.addWidget(self.tX)
+        self.X.addWidget(self.bX)
+
+        self.Y.addWidget(self.lY)
+        self.Y.addWidget(self.tY)
+        self.Y.addWidget(self.bY)
+
+        self.Z.addWidget(self.lZ)
+        self.Z.addWidget(self.tZ)
+        self.Z.addWidget(self.bZ)
+
+
+        self.XW = QWidget()
+        self.XW.setLayout(self.X)
+        self.YW = QWidget()
+        self.YW.setLayout(self.Y)
+        self.ZW = QWidget()
+        self.ZW.setLayout(self.Z)
+        self.grid.addWidget(self.XW)
+        self.grid.addWidget(self.YW)
+        self.grid.addWidget(self.ZW)
+
+        self.setLayout(self.grid)
+        self.show()
+
+    def CX(self):
+        engine.perform("G0 X"+self.tX.text().replace(',','.'))
+    
+    def CY(self):
+        engine.perform("G0 Y"+self.tY.text().replace(',','.'))
+
+    def CZ(self):
+        engine.perform("G0 Z"+self.tZ.text().replace(',','.'))
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Settings()
     sys.exit(app.exec_())
+
 

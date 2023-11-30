@@ -1,7 +1,12 @@
 import os, time
 com=''
+
 def start(com_port):
     global com
+    if len(com_port)<4:
+        print('Не введён последовательный порт')
+        quit()
+
     com = com_port
     start = ["G21",
     "G90",
@@ -10,6 +15,7 @@ def start(com_port):
     "G92 X0 Y0 Z0 E0"]
 
     mode = os.popen('mode '+com_port).read()
+    
 
     if len(mode) < 100:
         print('Ошибка с подключением с портом')

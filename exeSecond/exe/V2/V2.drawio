@@ -1,0 +1,103 @@
+<mxfile host="Electron" modified="2023-11-27T09:26:38.417Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.7.5 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="SkXVqXXCsealrNxz7gHM" version="21.7.5" type="device">
+  <diagram name="Страница — 1" id="e6S9M1SVRDEk9HZY0nd2">
+    <mxGraphModel dx="1488" dy="1062" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry y="220" width="900" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-28" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="10" y="230" width="880" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-3" value="Camera" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="20" y="240" width="400" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-4" value="X" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="440" y="240" width="40" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-5" value="Y" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="440" y="300" width="40" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-6" value="X" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="490" y="240" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-7" value="Y" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="490" y="300" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-11" value="Свет" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="490" y="410" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-12" value="Z" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="440" y="360" width="40" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-13" value="Z" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="490" y="360" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-14" value="выкл" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="440" y="410" width="40" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-15" value="Идти" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="650" y="240" width="230" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-16" value="Label" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="364" y="-20" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-17" value="Button" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="364" y="30" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-20" value="Запомнить расположение камеры" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="650" y="300" width="230" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-21" value="Запомнить расположение первой ячейки" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="650" y="360" width="230" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-22" value="EditLine" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="364" y="80" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-25" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="10" y="710" width="880" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-26" value="GRID BOX 1" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="30" y="720" width="410" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="U4VAubOe-vrRN7NHzxHv-27" value="GRID BOX 2" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="460" y="720" width="410" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-4" value="насос" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="706" y="410" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-5" value="выкл" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="650" y="410" width="40" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-6" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="10" y="560" width="880" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-14" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="570" width="350" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-7" value="Настройки" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="50" y="581" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-8" value="Камера" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="50" y="640" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-13" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="570" width="482.5" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-9" value="Камера" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="725" y="641" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-10" value="Камера" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="570" y="641" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-11" value="Камера" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="409" y="641" width="145" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="Wiw9EYrapDJWxhbOS_T9-12" value="Камера" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="570" y="581" width="145" height="38" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

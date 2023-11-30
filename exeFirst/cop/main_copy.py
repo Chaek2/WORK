@@ -9,7 +9,7 @@ cv.resizeWindow("Display window", 500, 500)
 cv.namedWindow("Display", cv.WINDOW_NORMAL)
 cv.resizeWindow("Display", 500, 500)
 
-fn = 'photo_2023-08-31_12-56-50.jpg' # имя файла, который будем анализировать
+fn = 'PT.jpg' # имя файла, который будем анализировать
 
 img = cv.imread(fn,0)
 

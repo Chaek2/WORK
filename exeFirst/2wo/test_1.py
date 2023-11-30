@@ -14,11 +14,12 @@ def Rap():
     cv.resizeWindow("Display", 500, 500)
 
     cv.namedWindow("settings")  # создаем окно настроек
+    cv.resizeWindow("settings", 700, 500)
 
-    cv.createTrackbar("area1", "settings", 6666, 10000, nothing)  # 4000
+    cv.createTrackbar("area1", "settings", 6666, 90000, nothing)  # 4000
     cv.createTrackbar("area2", "settings", 20000, 90000, nothing)
 
-    fn = "Push0.jpg"
+    fn = "PT0.jpg"
     imgs = cv.imread(fn)
     hsv = cv.cvtColor(imgs, cv.COLOR_BGR2HSV)
     area1 = 6666
