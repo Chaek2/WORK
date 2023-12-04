@@ -16,6 +16,7 @@ class Setting:
     CAM = -1
     COM = 'COM'
 
+pogr = [0,0]
 camera_XY = [0,0]
 box_first_XY = [0,0]
 light = False
@@ -297,6 +298,10 @@ class App(QWidget):
         self.g31 = QGridLayout()
         self.w31 = QWidget()
 
+        
+        self.BH = QPushButton("Дом") #Home
+        self.BH.clicked.connect(self.Home)
+
         self.LG = QLabel('Панель')
         self.LG.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.LG.setFixedSize(120,38)
@@ -335,14 +340,16 @@ class App(QWidget):
         self.g31.addWidget(self.LGX,0,4)
         self.g31.addWidget(self.CGX,0,5)
         self.g31.addWidget(self.BG,0,6)
-        self.g31.addWidget(self.BA,0,7)
+        self.g31.addWidget(self.BA,1,6)
+        self.g31.addWidget(self.BH,2,6)
+        
 
         self.w31.setLayout(self.g31)
         self.g3.addWidget(self.w31)
         self.w3.setLayout(self.g3)
 
         self.w3.setLayout(self.g3)
-        self.w3.setFixedSize(900,100)
+        self.w3.setFixedSize(900,200)
 
         self.grid.addWidget(self.w1)        
         self.grid.addWidget(self.w2)        
@@ -358,34 +365,37 @@ class App(QWidget):
     @pyqtSlot(QImage)
     def update_image(self, cv_img):
         self.cam.setPixmap(QPixmap.fromImage(cv_img))
-#--------------------------------defs--Perfomence--Pump--Light---------------------------------------------------
+#--------------------------------defs--Perfomence--Pump--Light--Home----------------------------------------------
     def Perfomence(self, string: str):
         engine.perform(string)
 
     def Click_Pump(self):
         global take, A
-        self.Perfomence("G0 A"+(str(0)))
-        time.sleep(1)
         if not take:
             #Включить вакум
-            self.Perfomence("G0 Z20")
-            time.sleep(1.2)
+            self.Perfomence("G0 Z20 A0")
+            time.sleep(3)
             self.Perfomence("M808")
             self.LP.setStyleSheet("background-color: green")
             take = True
-            time.sleep(1.2)
         else:
             #Выключить вакум
-            self.Perfomence("G0 Z17")
-            time.sleep(1.2)
+            self.Perfomence("G0 Z17 A0")
+            time.sleep(3)
             self.Perfomence("G0 A"+(str(A))) 
-            time.sleep(1)
+            time.sleep(4)
             self.Perfomence("M809")
             self.LP.setStyleSheet("background-color: black")
             take = False
         time.sleep(1)
-        self.Perfomence("G0 A"+(str(0))) 
-        self.Perfomence("G0 Z0")
+        self.Perfomence("G0 Z0 A0") 
+
+    def Home(self):
+        self.Perfomence("G0 X0 Y0 Z0")
+        self.TX.setText(str('0,0').replace('.',',').replace(' ',''))
+        self.TY.setText(str('0,0').replace('.',',').replace(' ',''))
+        self.TZ.setText(str('0,0').replace('.',',').replace(' ',''))
+        time.sleep(1)
 
     def Click_Light(self):
         global light
@@ -411,7 +421,8 @@ class App(QWidget):
         self.close()
 
     def Click_Camera_XY(self):
-        global camera_XY            
+        global camera_XY, pogr
+        pogr = [0,0]         
         try:
             with open("XYZ.pickle", "rb") as f:
                 camera_XY = pickle.load(f)
@@ -448,16 +459,24 @@ class App(QWidget):
                 pass 
 
     def Click_Grid(self):
-        global box_first_XY    
+        global box_first_XY, pogr    
+        boxY = [[0,6.5,13.1,19.8,26.3,34.2,40.7,47.3,53.9,60.0],
+        [79.8,86.3,92.9,99.6,106.1,114.0,120.5,127.1,133.7,139.8]]
+        boxX = [0,6.5,13,19.6,25.9,33.9,40.8,47,53.9,59.8]
         try:
             with open("BOX.pickle", "rb") as f:
                 box_first_XY = pickle.load(f)
         except:
             pass            
         if box_first_XY != [0,0]: 
-            self.TX.setText(str(box_first_XY[0]).replace('.',',').replace(' ',''))
-            self.TY.setText(str(box_first_XY[1]).replace('.',',').replace(' ',''))
-            self.Perfomence("G0 X"+str(box_first_XY[0])+" Y"+str(box_first_XY[1]))
+            G = int(self.CG.currentText())-1
+            X = int(self.CGX.currentText())-1
+            Y = int(self.CGY.currentText())-1
+            XY1 = box_first_XY[0]+boxX[X]
+            XY2 = box_first_XY[1]+boxY[G][Y]
+            self.TX.setText(str(XY1).replace('.',',').replace(' ',''))
+            self.TY.setText(str(XY2).replace('.',',').replace(' ',''))
+            self.Perfomence("G0 X"+str(XY1)+" Y"+str(XY2))
 #-----------------------------------DULRBF-----------------------------------------------------------------------
     def Click_Down(self):
         zd = round(float(self.TZ.text().replace(',','.').replace(' ',''))+0.1,1)
@@ -497,14 +516,15 @@ class App(QWidget):
         print(A)
 
     def SearchAngle(self):
-        global A
-        self.Perfomence("G0 A"+(str(0)))   
-        time.sleep(1)
+        global A, camera_XY, pogr
+        self.Perfomence("G0 A0")
+        A=0   
+        time.sleep(4)
         try:
             image_main = cv.imread("PR.jpg")
             cv.imwrite("PT0.jpg", image_main) 
             angle = Commands.angleSearch()
-            A = -angle
+            A += angle
             self.Perfomence("G0 A"+(str(A)))
             print(A)
         except:
