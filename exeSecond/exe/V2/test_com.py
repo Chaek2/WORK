@@ -5,13 +5,13 @@ class Setting:
 camera_XY = [0,0]
 box_first_XY = [0,0]
 sets = Setting()
-with open("XYZ.pickle", "rb") as f:
+with open("exeSecond/exe/V2/ST/XYZ.pickle", "rb") as f:
     camera_XY = pickle.load(f)
 
-with open("BOX.pickle", "rb") as f:
+with open("exeSecond/exe/V2/ST/BOX.pickle", "rb") as f:
     box_first_XY = pickle.load(f)
 
-with open("SET.pickle", "rb") as f:
+with open("exeSecond/exe/V2/ST/SET.pickle", "rb") as f:
     sets = pickle.load(f)
 
 print(camera_XY)

@@ -1,6 +1,6 @@
-from PIL import Image
-import numpy as np
-import cv2 as cv
+from PIL import Image # Pillow 9.5.0
+import numpy as np # numpy 1.23.5
+import cv2 as cv # opencv-python 4.7.0.72
 import math
 
 def Ang(image_main, angle):
@@ -34,7 +34,7 @@ def angleSearch():
             boxcp = cv.boxPoints(rect)
             box = np.int0(boxcp)
             area = int(rect[1][0] * rect[1][1])
-            if area > 460 and area < 1516:
+            if area > 400 and area < 1516:
                 cnts.append(box)
     except Exception as e:
         print('ERROR_0: '+str(e))
@@ -63,6 +63,7 @@ def angleSearch():
                 t1 = [cnts1[0][0], cnts1[1][1]]
                 t2 = [cnts1[1][0], cnts1[0][1]]
             angle = math.degrees(math.atan((t1[1] - t2[1]) / (t2[0] - t1[0])))
+            angle *=-1
         except Exception as e:
             print('ERROR_1: '+str(e))
             return 0
@@ -85,7 +86,7 @@ def angleSearch():
                 image_main = Ang(image_main, 180)
                 if angle < 180:
                     angle +=180
-                elif angle > 180:
+                else:
                     angle-=180
         except Exception as e:
             print('ERROR_2: '+str(e))
@@ -99,17 +100,23 @@ def angleSearch():
 
 def SearchCounter():
     try:
-        with Image.open("TM2.jpg") as img_main:
+        with Image.open("exeSecond/exe/V2/PH/SC0.jpg") as img_main:
             img_main.load()
-        img_main = np.array(img_main)
-        hsv = cv.cvtColor(img_main, cv.COLOR_BGR2HSV)
+        x,y = img_main.size
+        boxes = (x/2-80,y/2-80,x/2+80,y/2+80)
+        im = img_main.crop(boxes)
+        img_sc = np.array(im)
+        hsv = cv.cvtColor(img_sc, cv.COLOR_BGR2HSV)
         height, width = hsv.shape[:2]
         X=int(height/2)
         Y=int(width/2)
 
         h_min = np.array((0, 23, 0), np.uint8)
-        h_max = np.array((255, 255, 196), np.uint8)
+        h_max = np.array((255, 255, 181), np.uint8)
         image_first = cv.inRange(hsv, h_min, h_max)
+    except:
+        print("ERROR_3_1")
+    try:
         contours = cv.findContours(
             image_first.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_TC89_KCOS
         )[0]
@@ -120,9 +127,11 @@ def SearchCounter():
                 box = cv.boxPoints(rect)
                 box = np.int0(box)
                 area = int(rect[1][0] * rect[1][1])
-                if area > 2041 and area < 7872:
+                if area > 1500 and area < 11000:
                     x1 = abs(box[0][0]-box[3][0])
-                    y1 = abs(box[1][1]-box[3][1])
+                    y1 = abs(box[0][1]-box[1][1])
+                    cv.drawContours(image_first, [box], -1, (255, 255, 255), 2)
+                    cv.imwrite("exeSecond/exe/V2/PH/TM3.jpg",image_first)
                     return round((X-x1)/100,1)/2,round((Y-y1)/100,1)/2
     except:
-        print("ERROR_3")
+        print("ERROR_3_2")

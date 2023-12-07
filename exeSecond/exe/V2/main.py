@@ -22,6 +22,7 @@ class Setting:
         self.COM = 'COM'
 
 pogr = [0,0]
+ispogr = False
 camera_XY = [0,0]
 box_first_XY = [0,0]
 light = False
@@ -402,13 +403,17 @@ class App(QWidget):
         if not take:
             #Включить вакум
             self.Perfomence("G0 Z20 A0")
-            time.sleep(3)
+            time.sleep(1)
+            self.Perfomence("G0 A0")
+            time.sleep(2)
             self.Perfomence("M808")
             self.LP.setStyleSheet("background-color: green")
             take = True
         else:
             #Выключить вакум
-            self.Perfomence("G0 Z17 A0")
+            self.Perfomence("G0 Z17")
+            time.sleep(2)
+            self.Perfomence("G0 A0")
             time.sleep(3)
             self.Perfomence("G0 A"+(str(A))) 
             time.sleep(4)
@@ -513,9 +518,11 @@ class App(QWidget):
         """
         Передвижение по ячейкам 2-х таблиц
         """
-        global box_first_XY, pogr    
+        global box_first_XY, pogr, ispogr    
         boxY = [[0,6.5,13.1,19.8,26.3,34.2,40.7,47.3,53.9,60.0],
         [79.8,86.3,92.9,99.6,106.1,114.0,120.5,127.1,133.7,139.8]]
+        # boxY = [[0,6.7,13.4,20.1,26.8,35,41.7,48.4,55.1,61.8],
+        # [79.8,86.3,92.9,99.6,106.1,114.0,120.5,127.1,133.7,139.8]]
         boxX = [0,6.5,13,19.6,25.9,33.9,40.8,47,53.9,59.8]
         try:
             with open("exeSecond/exe/V2/ST/BOX.pickle", "rb") as f:
@@ -526,11 +533,16 @@ class App(QWidget):
             G = int(self.CG.currentText())-1
             X = int(self.CGX.currentText())-1
             Y = int(self.CGY.currentText())-1
-            XY1 = box_first_XY[0]+boxX[X]
-            XY2 = box_first_XY[1]+boxY[G][Y]
+            if ispogr:
+                XY1 = box_first_XY[0]+boxX[X]+pogr[0]
+                XY2 = box_first_XY[1]+boxY[G][Y]+pogr[1]
+                ispogr = False
+            else:
+                XY1 = box_first_XY[0]+boxX[X]
+                XY2 = box_first_XY[1]+boxY[G][Y]
             self.TX.setText(str(XY1).replace('.',',').replace(' ',''))
             self.TY.setText(str(XY2).replace('.',',').replace(' ',''))
-            self.Perfomence("G0 X"+str(XY1)+" Y"+str(XY2))
+            self.Perfomence("G0 X"+str(XY1)+" Y"+str(XY2)+"A0")
 #-----------------------------------DULRBF-----------------------------------------------------------------------
     def Click_Down(self):
         zd = round(float(self.TZ.text().replace(',','.').replace(' ',''))+0.1,1)
@@ -579,16 +591,28 @@ class App(QWidget):
         """
         Поворот по главному выводу
         """
-        global A, camera_XY, pogr
+        global A, camera_XY, pogr, ispogr
         self.Perfomence("G0 A0")
         A=0   
         time.sleep(4)
+        ispogr = False
         try:
-            image_main = cv.imread("PR.jpg")
-            cv.imwrite("exeSecond/exe/V2/PH/PT0.jpg", image_main) 
+            image_sa = cv.imread("PR.jpg")
+            cv.imwrite("exeSecond/exe/V2/PH/PT0.jpg", image_sa) 
             angle = Commands.angleSearch()
             A = angle
             self.Perfomence("G0 A"+(str(A)))
+            time.sleep(2)
+            image_sc= cv.imread("PR.jpg")
+            cv.imwrite("exeSecond/exe/V2/PH/SC0.jpg", image_sc)
+            time.sleep(2)
+            px,py = Commands.SearchCounter()
+            pogr[0] = px
+            pogr[1] = py
+            ispogr = True
+            PX = round(float(self.TX.text().replace(',','.').replace(' ','')),1)+pogr[0]
+            PY = round(float(self.TY.text().replace(',','.').replace(' ','')),1)+pogr[1]
+            self.Perfomence("G0 X"+str(PX)+" Y"+str(PY))
             print(A)
         except:
             pass
