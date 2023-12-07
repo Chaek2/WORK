@@ -125,7 +125,6 @@ class MainWindow(QMainWindow):
                 self.listbox = log
                 self.pixmap_image = QPixmap("Push1.jpg")
                 self.lable_image.setPixmap(self.pixmap_image)
-                # self.lable_image.setFixedSize(400,300)
                 self.maingrid.addWidget(self.lable_image, 2, 0, 2, 2)
             case 2:
                 self.maingrid.removeWidget(self.lab5)
@@ -133,7 +132,6 @@ class MainWindow(QMainWindow):
                 self.listbox = log
                 self.pixmap_image = QPixmap("Push2.jpg")
                 self.lable_image.setPixmap(self.pixmap_image)
-                # self.lable_image.setFixedSize(400, 300)
                 self.maingrid.addWidget(self.lable_image, 2, 0, 2, 2)
                 self.lab5 = QLabel(Radius + str(angle))
                 self.maingrid.addWidget(self.lab5, 11, 0)

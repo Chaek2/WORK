@@ -12,9 +12,14 @@ import Commands
 import time
 import pickle
 import serial.tools.list_ports
+
 class Setting:
-    CAM = -1
-    COM = 'COM'
+    """
+    Класс настроек
+    """
+    def __init__(self):
+        self.CAM = -1
+        self.COM = 'COM'
 
 pogr = [0,0]
 camera_XY = [0,0]
@@ -27,6 +32,9 @@ sets.COM = ""
 A = 0
 
 class VideoThread(QThread):
+    """
+    Класс работы с камерой (потоковая передача)
+    """
     change_pixmap_signal = pyqtSignal(QImage)
     def run(self):
         global sets
@@ -57,6 +65,9 @@ class VideoThread(QThread):
                     self.change_pixmap_signal.emit(p)
 
 class Settings(QWidget):
+    """
+    Класс окна настроек
+    """
 #----------------------------------------------------------------------------------------------------------------
     def __init__(self):
         super().__init__()
@@ -84,7 +95,6 @@ class Settings(QWidget):
 
         self.setLayout(self.grid)
 #--------------------------------try-----------------------------------------------------------------------------
-        
         try:
             with open("exeSecond/exe/V2/ST/SET.pickle", "rb") as f:
                 sets = pickle.load(f)
@@ -96,8 +106,11 @@ class Settings(QWidget):
             for port in self.ports:
                 self.cbmcom.addItem(port.device)
             self.show()
-#--------------------------------defs-----------------------------------------------------------------------------
+#--------------------------------defs----------------------------------------------------------------------------
     def Save(self):
+        """
+        Сохранение настроек
+        """
         global sets
         if int(self.cbmcam.currentText()) > -1 and self.cbmcom.currentText() != "": 
             sets.CAM = int(self.cbmcam.currentText())
@@ -108,27 +121,33 @@ class Settings(QWidget):
             self.close()
 
     def CAMERA_PORT(self):
-            is_working = True
-            dev_port = 0
-            working_ports = []
-            available_ports = []
-            while is_working:
-                camera = cv.VideoCapture(dev_port)
-                if not camera.isOpened():
-                    is_working = False
+        """
+        Вывод работающих камер
+        """
+        is_working = True
+        dev_port = 0
+        working_ports = []
+        available_ports = []
+        while is_working:
+            camera = cv.VideoCapture(dev_port)
+            if not camera.isOpened():
+                is_working = False
+            else:
+                is_reading, img = camera.read()
+                w = camera.get(3)
+                h = camera.get(4)
+                if is_reading:
+                    working_ports.append(dev_port)
                 else:
-                    is_reading, img = camera.read()
-                    w = camera.get(3)
-                    h = camera.get(4)
-                    if is_reading:
-                        working_ports.append(dev_port)
-                    else:
-                        available_ports.append(dev_port)
-                dev_port +=1
-            working_ports = working_ports[:-1]
-            return working_ports
+                    available_ports.append(dev_port)
+            dev_port +=1
+        working_ports = working_ports[:-1]
+        return working_ports
 
-class App(QWidget):
+class App(QWidget):    
+    """
+    Класс главного окна
+    """
 #----------------------------------------------------------------------------------------------------------------
     def __init__(self):
         super().__init__()    
@@ -365,11 +384,17 @@ class App(QWidget):
     @pyqtSlot(QImage)
     def update_image(self, cv_img):
         self.cam.setPixmap(QPixmap.fromImage(cv_img))
-#--------------------------------defs--Perfomence--Pump--Light--Home----------------------------------------------
+#--------------------------------defs--Perfomence--Pump--Light--Home---------------------------------------------
     def Perfomence(self, string: str):
+        """
+        Отправка запроса действий на плату
+        """
         engine.perform(string)
 
     def Click_Pump(self):
+        """
+        Включение\Выключение насоса
+        """
         global take, A
         if not take:
             #Включить вакум
@@ -391,6 +416,9 @@ class App(QWidget):
         self.Perfomence("G0 Z0 A0") 
 
     def Home(self):
+        """
+        Передвижение в начальную точку (0, 0, 0)
+        """
         self.Perfomence("G0 X0 Y0 Z0")
         self.TX.setText(str('0,0').replace('.',',').replace(' ',''))
         self.TY.setText(str('0,0').replace('.',',').replace(' ',''))
@@ -398,6 +426,9 @@ class App(QWidget):
         time.sleep(1)
 
     def Click_Light(self):
+        """
+        Включение\Выключение света
+        """
         global light
         if not light: 
             #Включить свет
@@ -411,16 +442,25 @@ class App(QWidget):
             light = False
 #--------------------------------------Wolk--Setting--Camera_XY--Save_Camera--Save_Box--Grid---------------------
     def Click_Wolk(self):
+        """
+        Передвижение по координатам
+        """
         self.Perfomence("G0 X"+str(float(self.TX.text().replace(',','.').replace(' ','')))+" Y"+
         str(float(self.TY.text().replace(',','.').replace(' ','')))+
         " Z"+str(float(self.TZ.text().replace(',','.').replace(' ',''))))
     
     def Click_Setting(self):
+        """
+        Удаление настроек
+        """
         os.remove("exeSecond/exe/V2/ST/SET.pickle")
         self.w = Settings()
         self.close()
 
     def Click_Camera_XY(self):
+        """
+        Передвижение к координатам камеры
+        """
         global camera_XY, pogr
         pogr = [0,0]         
         try:
@@ -435,8 +475,12 @@ class App(QWidget):
             self.Perfomence("G0 X"+str(round(float(self.TX.text().replace(',','.').replace(' ','')),1))+" Y"+
             str(round(float(self.TY.text().replace(',','.').replace(' ','')),1))+
             " Z0")
+            self.Perfomence("G0 A0")
 
     def Click_Save_Camera(self):
+        """
+        Сохранение координат камеры
+        """
         global camera_XY
         if float(self.TX.text().replace(',','.').replace(' ','')) > -1 and float(self.TY.text().replace(',','.').replace(' ','')) > -1:
             camera_XY[0] = round(float(self.TX.text().replace(',','.').replace(' ','')),1)
@@ -448,6 +492,9 @@ class App(QWidget):
                 pass
 
     def Click_Save_Box(self):
+        """
+        Сохранение координат первой ячейки
+        """
         global box_first_XY
         if float(self.TX.text().replace(',','.').replace(' ','')) > -1 and float(self.TY.text().replace(',','.').replace(' ','')) > -1:
             box_first_XY[0] = float(self.TX.text().replace(',','.').replace(' ',''))
@@ -459,6 +506,9 @@ class App(QWidget):
                 pass 
 
     def Click_Grid(self):
+        """
+        Передвижение по ячейкам 2-х таблиц
+        """
         global box_first_XY, pogr    
         boxY = [[0,6.5,13.1,19.8,26.3,34.2,40.7,47.3,53.9,60.0],
         [79.8,86.3,92.9,99.6,106.1,114.0,120.5,127.1,133.7,139.8]]
@@ -505,17 +555,26 @@ class App(QWidget):
         self.TY.setText(str(yf).replace('.',',').replace(' ',''))
 #----------------------------------AL--AR--SearchAngle-----------------------------------------------------------
     def Click_A_Left(self):
+        """
+        Поворот на 1 градус
+        """
         global A
         A += 1
         self.Perfomence("G0 A"+(str(A)))
         print(A)
     def Click_A_Right(self):
+        """
+        Поворот на -1 градус
+        """
         global A
         A -=1
         self.Perfomence("G0 A"+(str(A)))
         print(A)
 
     def SearchAngle(self):
+        """
+        Поворот по главному выводу
+        """
         global A, camera_XY, pogr
         self.Perfomence("G0 A0")
         A=0   
@@ -524,7 +583,7 @@ class App(QWidget):
             image_main = cv.imread("PR.jpg")
             cv.imwrite("exeSecond/exe/V2/PH/PT0.jpg", image_main) 
             angle = Commands.angleSearch()
-            A += angle
+            A = angle
             self.Perfomence("G0 A"+(str(A)))
             print(A)
         except:

@@ -99,7 +99,7 @@ def angleSearch():
 
 def SearchCounter():
     try:
-        with Image.open("TM1.jpg") as img_main:
+        with Image.open("TM2.jpg") as img_main:
             img_main.load()
         img_main = np.array(img_main)
         hsv = cv.cvtColor(img_main, cv.COLOR_BGR2HSV)
@@ -126,5 +126,3 @@ def SearchCounter():
                     return round((X-x1)/100,1)/2,round((Y-y1)/100,1)/2
     except:
         print("ERROR_3")
-
-# print(angleSearch())
