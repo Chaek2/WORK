@@ -41,28 +41,31 @@ class VideoThread(QThread):
         if sets.CAM > -1:
             cap = cv.VideoCapture(sets.CAM)
             while 1:
-                ret, frame = cap.read()
-                cv.imwrite("PR.jpg", frame)
-                time.sleep(0.1)
-                if ret:                
-                    gray = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-                    height, width = gray.shape[:2]
-                    start_p_v=(0,int(height/2))
-                    end_p_v=(width,int(height/2))
-                    start_p_h=(int(width/2),0)
-                    end_p_h=(int(width/2),height)
-                    circ = (int(width/2),int(height/2))
+                try:
+                    ret, frame = cap.read()
+                    cv.imwrite("PR.jpg", frame)
+                    time.sleep(0.1)
+                    if ret:                
+                        gray = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                        height, width = gray.shape[:2]
+                        start_p_v=(0,int(height/2))
+                        end_p_v=(width,int(height/2))
+                        start_p_h=(int(width/2),0)
+                        end_p_h=(int(width/2),height)
+                        circ = (int(width/2),int(height/2))
 
-                    cv.line(frame,start_p_v,end_p_v,(0,255,0),2)
-                    cv.line(frame,start_p_h,end_p_h,(0,255,0),2)
-                    cv.circle(frame,circ,3,(255,0,0),2)
+                        cv.line(frame,start_p_v,end_p_v,(0,255,0),2)
+                        cv.line(frame,start_p_h,end_p_h,(0,255,0),2)
+                        cv.circle(frame,circ,3,(255,0,0),2)
 
-                    rgb_image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-                    h, w, ch = rgb_image.shape
-                    bytes_per_line = ch * w
-                    convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-                    p = convert_to_Qt_format.scaled(400, 300, Qt.KeepAspectRatio)
-                    self.change_pixmap_signal.emit(p)
+                        rgb_image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                        h, w, ch = rgb_image.shape
+                        bytes_per_line = ch * w
+                        convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+                        p = convert_to_Qt_format.scaled(400, 300, Qt.KeepAspectRatio)
+                        self.change_pixmap_signal.emit(p)
+                except:
+                    pass
 
 class Settings(QWidget):
     """
@@ -454,6 +457,7 @@ class App(QWidget):
         Удаление настроек
         """
         os.remove("exeSecond/exe/V2/ST/SET.pickle")
+        self.thread.disconnect()
         self.w = Settings()
         self.close()
 

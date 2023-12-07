@@ -26,11 +26,11 @@ cv.createTrackbar("h_min_3", "settings", 0, 255, nothing)
 cv.createTrackbar("h_max_1", "settings", 255, 255, nothing)
 cv.createTrackbar("h_max_2", "settings", 255, 255, nothing)
 cv.createTrackbar("h_max_3", "settings", 255, 255, nothing)
-cv.createTrackbar("area1", "settings", 290, 20000, nothing)
-cv.createTrackbar("area2", "settings", 800, 20000, nothing)
+cv.createTrackbar("area1", "settings", 525, 20000, nothing)
+cv.createTrackbar("area2", "settings", 1500, 20000, nothing)
 cv.createTrackbar("cnt", "settings", 0, 6, nothing)
 
-fn = "PT0.jpg"
+fn = "exeSecond/exe/V2/PH/PT0.jpg"
 # img_main = cv.imread(fn)
 with Image.open(fn) as img_main:
     img_main.load()
@@ -76,10 +76,10 @@ while True:
             cv.drawContours(img, [b], -1, (255, 255, 255), 2)           
     angle = Commands.angleSearch()
     print(f"angle: {angle}")
-    img_m = cv.imread("exeSecond/exe/V2/PH/TM1.jpg")
+    # img_m = cv.imread("exeSecond/exe/V2/PH/TM1.jpg")
     cv.imshow("Display window", img)
     cv.imshow("Display", thresh)
-    cv.imshow("Dis", img_m)
+    # cv.imshow("Dis", img_m)
     if cv.waitKey(1) == ord("q"):
         break
 
