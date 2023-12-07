@@ -12,7 +12,7 @@ def Ang(image_main, angle):
 def angleSearch():
     cnts = []
     try:
-        with Image.open("PT0.jpg") as img_main:
+        with Image.open("exeSecond/exe/V2/PH/PT0.jpg") as img_main:
             img_main.load()
         x,y = img_main.size
         boxes = (x/2-70,y/2-70,x/2+70,y/2+70)
@@ -24,7 +24,7 @@ def angleSearch():
         h_min = np.array((0, 27, 0), np.uint8)
         h_max = np.array((255, 255, 255), np.uint8)
         image_first = cv.inRange(hsv, h_min, h_max)
-
+        # cv.imwrite("exeSecond/exe/V2/PH/TM0.jpg", image_first)
 
         contours = cv.findContours(
             image_first.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_TC89_KCOS
@@ -34,19 +34,20 @@ def angleSearch():
             boxcp = cv.boxPoints(rect)
             box = np.int0(boxcp)
             area = int(rect[1][0] * rect[1][1])
-            if area > 290 and area < 800:
+            # if area > 290 and area < 800:
+            if area > 525 and area < 1516:
                 cnts.append(box)
     except Exception as e:
         print('ERROR_0: '+str(e))
         return 0
     if len(cnts) > 0:
         try:
-            print(len(cnts))
-            if len(cnts) > 2: cnts1 = cnts[2]
-            elif len(cnts) > 1: cnts1 = cnts[1]
-            else:
-                print("ERROR_0.1")
-                return 0
+            # if len(cnts) > 2: cnts1 = cnts[2]
+            # elif len(cnts) > 1: cnts1 = cnts[1]
+            # else:
+            #     print("ERROR_0.1")
+            #     return 0
+            cnts1 = cnts[0]
             t1 = 0
             t2 = 0
 
@@ -90,8 +91,8 @@ def angleSearch():
         except Exception as e:
             print('ERROR_2: '+str(e))
             return 0       
-        cv.imwrite("TM0.jpg", Ang(image_main,angle))
-        cv.imwrite("TM1.jpg", Ang(img_main,angle))
+        # cv.imwrite("exeSecond/exe/V2/PH/TM1.jpg", Ang(image_main,angle))
+        # cv.imwrite("exeSecond/exe/V2/PH/TM2.jpg", Ang(img_main,angle))
         return angle
     print("Нет элементов")
     return 0

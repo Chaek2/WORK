@@ -70,11 +70,13 @@ while True:
             area = int(rect[1][0] * rect[1][1])
             if area > area1 and area < area2:
                 cnts.append(box)
-        b = cnts[CD]
-        cv.drawContours(thresh, [b], -1, (255, 255, 255), 2)
-        cv.drawContours(img, [b], -1, (255, 255, 255), 2)           
+        if len(cnts)>CD:
+            b = cnts[CD]
+            cv.drawContours(thresh, [b], -1, (255, 255, 255), 2)
+            cv.drawContours(img, [b], -1, (255, 255, 255), 2)           
     angle = Commands.angleSearch()
-    img_m = cv.imread(fn)
+    print(f"angle: {angle}")
+    img_m = cv.imread("exeSecond/exe/V2/PH/TM1.jpg")
     cv.imshow("Display window", img)
     cv.imshow("Display", thresh)
     cv.imshow("Dis", img_m)
@@ -84,7 +86,7 @@ while True:
 cv.destroyAllWindows()
 
 
-# 0 23 0 / 255 255 196 / 2041 7872
+# 0 23 0 / 255 255 196 / 2041 7872 (525 1516)
 # [[ 30  41] 
 #  [112  28]
 #  [126 111]

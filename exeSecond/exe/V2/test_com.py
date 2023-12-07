@@ -1,12 +1,19 @@
-import engine
+import pickle
+class Setting:
+    CAM = -1
+    COM = 'COM'
+camera_XY = [0,0]
+box_first_XY = [0,0]
+sets = Setting()
+with open("XYZ.pickle", "rb") as f:
+    camera_XY = pickle.load(f)
 
-engine.start("COM5")
+with open("BOX.pickle", "rb") as f:
+    box_first_XY = pickle.load(f)
 
-while 1:
-    command = input("Command: ")
-    if command == "EX":
-        break
-    engine.perform("G0 "+command)
-    input("END? ")
-    engine.perform("G0 X0 Y0 Z0")
-        
+with open("SET.pickle", "rb") as f:
+    sets = pickle.load(f)
+
+print(camera_XY)
+print(box_first_XY)
+print(sets.CAM,sets.COM)

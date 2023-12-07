@@ -86,7 +86,7 @@ class Settings(QWidget):
 #--------------------------------try-----------------------------------------------------------------------------
         
         try:
-            with open("SET.pickle", "rb") as f:
+            with open("exeSecond/exe/V2/ST/SET.pickle", "rb") as f:
                 sets = pickle.load(f)
             self.w = App()
             self.close()
@@ -102,7 +102,7 @@ class Settings(QWidget):
         if int(self.cbmcam.currentText()) > -1 and self.cbmcom.currentText() != "": 
             sets.CAM = int(self.cbmcam.currentText())
             sets.COM = str(self.cbmcom.currentText())
-            with open("SET.pickle", "wb") as f:
+            with open("exeSecond/exe/V2/ST/SET.pickle", "wb") as f:
                 pickle.dump(sets, f, protocol=pickle.HIGHEST_PROTOCOL)
             self.w = App()
             self.close()
@@ -416,7 +416,7 @@ class App(QWidget):
         " Z"+str(float(self.TZ.text().replace(',','.').replace(' ',''))))
     
     def Click_Setting(self):
-        os.remove("SET.pickle")
+        os.remove("exeSecond/exe/V2/ST/SET.pickle")
         self.w = Settings()
         self.close()
 
@@ -424,7 +424,7 @@ class App(QWidget):
         global camera_XY, pogr
         pogr = [0,0]         
         try:
-            with open("XYZ.pickle", "rb") as f:
+            with open("exeSecond/exe/V2/ST/XYZ.pickle", "rb") as f:
                 camera_XY = pickle.load(f)
         except:
             pass
@@ -442,7 +442,7 @@ class App(QWidget):
             camera_XY[0] = round(float(self.TX.text().replace(',','.').replace(' ','')),1)
             camera_XY[1] = round(float(self.TY.text().replace(',','.').replace(' ','')),1)
             try:
-                with open("XYZ.pickle", "wb") as f:
+                with open("exeSecond/exe/V2/ST/XYZ.pickle", "wb") as f:
                     pickle.dump(camera_XY, f, protocol=pickle.HIGHEST_PROTOCOL)
             except:
                 pass
@@ -453,7 +453,7 @@ class App(QWidget):
             box_first_XY[0] = float(self.TX.text().replace(',','.').replace(' ',''))
             box_first_XY[1] = float(self.TY.text().replace(',','.').replace(' ',''))  
             try:
-                with open("BOX.pickle", "wb") as f:
+                with open("exeSecond/exe/V2/ST/BOX.pickle", "wb") as f:
                     pickle.dump(box_first_XY, f, protocol=pickle.HIGHEST_PROTOCOL)
             except:
                 pass 
@@ -464,7 +464,7 @@ class App(QWidget):
         [79.8,86.3,92.9,99.6,106.1,114.0,120.5,127.1,133.7,139.8]]
         boxX = [0,6.5,13,19.6,25.9,33.9,40.8,47,53.9,59.8]
         try:
-            with open("BOX.pickle", "rb") as f:
+            with open("exeSecond/exe/V2/ST/BOX.pickle", "rb") as f:
                 box_first_XY = pickle.load(f)
         except:
             pass            
@@ -522,7 +522,7 @@ class App(QWidget):
         time.sleep(4)
         try:
             image_main = cv.imread("PR.jpg")
-            cv.imwrite("PT0.jpg", image_main) 
+            cv.imwrite("exeSecond/exe/V2/PH/PT0.jpg", image_main) 
             angle = Commands.angleSearch()
             A += angle
             self.Perfomence("G0 A"+(str(A)))

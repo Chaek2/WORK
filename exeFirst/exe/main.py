@@ -146,6 +146,7 @@ class MainWindow(QMainWindow):
         h_min = np.array((0, 40, 31), np.uint8)
         h_max = np.array((35, 255, 255), np.uint8)
         image_first = cv.inRange(hsv, h_min, h_max)
+        cv.imwrite("P1.jpg", image_first)
 
         cnts = []
         area1 = 0
