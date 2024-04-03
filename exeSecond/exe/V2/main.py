@@ -7,11 +7,8 @@ import numpy as np
 import pandas as pd
 import os
 import sys
-import engine
-import Commands
 import time
 import pickle
-import serial.tools.list_ports
 
 class Setting:
     """
@@ -77,7 +74,7 @@ class Settings(QWidget):
         super().__init__()
         global sets
 
-        self.ports = serial.tools.list_ports.comports()
+        #self.ports = serial.tools.list_ports.comports()
         self.setWindowTitle('Настройки')
         self.setFixedSize(400,300)
         self.grid = QVBoxLayout()
@@ -155,7 +152,7 @@ class App(QWidget):
 #----------------------------------------------------------------------------------------------------------------
     def __init__(self):
         super().__init__()    
-        engine.start(sets.COM)
+        #engine.start(sets.COM)
         self.Perfomence("M809")
         self.Perfomence("M805")    
         self.setWindowTitle('Калибровка НКМЗ')
@@ -393,7 +390,7 @@ class App(QWidget):
         """
         Отправка запроса действий на плату
         """
-        engine.perform(string)
+        #engine.perform(string)
 
     def Click_Pump(self):
         """
@@ -619,5 +616,5 @@ class App(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Settings()
+    ex = App()
     sys.exit(app.exec_())
